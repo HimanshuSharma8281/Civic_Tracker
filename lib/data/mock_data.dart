@@ -1,0 +1,115 @@
+import '../models/models.dart';
+
+final List<Report> mockReports = [
+  Report(
+    id: '1',
+    title: 'Large pothole on Main Street',
+    description: 'There is a significant pothole near the intersection that is causing damage to vehicles and creating a safety hazard.',
+    category: 'Roads & Infrastructure',
+    status: ReportStatus.submitted,
+    createdAt: DateTime.now().subtract(Duration(hours: 2)),
+    location: '123 Main Street',
+    photos: ['https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400'],
+  ),
+  Report(
+    id: '2',
+    title: 'Broken streetlight',
+    description: 'The streetlight at the corner has been flickering for days and now appears to be completely out.',
+    category: 'Lighting',
+    status: ReportStatus.inProgress,
+    createdAt: DateTime.now().subtract(Duration(days: 1)),
+    location: '456 Oak Avenue',
+    photos: ['https://images.unsplash.com/photo-1574484284002-952d92456975?w=400'],
+    adminComment: 'Repair crew has been notified and will address this within 48 hours.',
+    updatedAt: DateTime.now().subtract(Duration(hours: 6)),
+  ),
+  Report(
+    id: '3',
+    title: 'Overflowing trash bin',
+    description: 'The public trash bin in the park is overflowing and attracting pests.',
+    category: 'Waste Management',
+    status: ReportStatus.resolved,
+    createdAt: DateTime.now().subtract(Duration(days: 3)),
+    location: 'Central Park',
+    photos: ['https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400'],
+    adminComment: 'Issue has been resolved. Trash has been collected and bin capacity increased.',
+    updatedAt: DateTime.now().subtract(Duration(hours: 12)),
+  ),
+  Report(
+    id: '4',
+    title: 'Graffiti on public building',
+    description: 'Vandalism on the side of the community center building needs to be cleaned.',
+    category: 'Vandalism',
+    status: ReportStatus.submitted,
+    createdAt: DateTime.now().subtract(Duration(hours: 8)),
+    location: '789 Community Drive',
+    photos: ['https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400'],
+  ),
+  Report(
+    id: '5',
+    title: 'Damaged park bench',
+    description: 'One of the benches in the park has a broken armrest and loose bolts.',
+    category: 'Parks & Recreation',
+    status: ReportStatus.inProgress,
+    createdAt: DateTime.now().subtract(Duration(days: 2)),
+    location: 'Riverside Park',
+    photos: ['https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400'],
+    adminComment: 'Park maintenance team will replace the bench this week.',
+    updatedAt: DateTime.now().subtract(Duration(hours: 4)),
+  ),
+];
+
+final List<NotificationItem> mockNotifications = [
+  NotificationItem(
+    id: '1',
+    title: 'Report Update',
+    message: 'Your pothole report has been assigned to a repair crew.',
+    timestamp: DateTime.now().subtract(Duration(hours: 1)),
+    read: false,
+    reportId: '1',
+  ),
+  NotificationItem(
+    id: '2',
+    title: 'Issue Resolved',
+    message: 'The trash bin overflow issue has been resolved.',
+    timestamp: DateTime.now().subtract(Duration(hours: 12)),
+    read: false,
+    reportId: '3',
+  ),
+  NotificationItem(
+    id: '3',
+    title: 'New Feature',
+    message: 'You can now add voice notes to your reports!',
+    timestamp: DateTime.now().subtract(Duration(days: 1)),
+    read: true,
+  ),
+  NotificationItem(
+    id: '4',
+    title: 'Report Received',
+    message: 'Thank you for reporting the broken streetlight.',
+    timestamp: DateTime.now().subtract(Duration(days: 2)),
+    read: true,
+    reportId: '2',
+  ),
+];
+
+final List<String> issueCategories = [
+  'Roads & Infrastructure',
+  'Lighting',
+  'Waste Management',
+  'Vandalism',
+  'Parks & Recreation',
+  'Traffic & Signage',
+  'Water & Drainage',
+  'Public Safety',
+  'Noise Complaints',
+  'Other',
+];
+
+final User mockUser = User(
+  id: '1',
+  name: 'John Doe',
+  email: 'john.doe@email.com',
+  phone: '+1 (555) 123-4567',
+  avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
+);
