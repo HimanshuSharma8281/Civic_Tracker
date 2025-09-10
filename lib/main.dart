@@ -15,7 +15,13 @@ import 'widgets/bottom_navigation.dart';
 import 'data/mock_data.dart';
 import 'models/models.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MyApp());
 }
 
