@@ -22,7 +22,7 @@ class _ReportScreenState extends State<ReportScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _locationController = TextEditingController();
-  
+
   String _selectedCategory = '';
   List<File> _selectedImages = [];
   bool _useCurrentLocation = true;
@@ -209,7 +209,8 @@ class _ReportScreenState extends State<ReportScreen> {
                     selectedColor: Colors.blue[100],
                     labelStyle: TextStyle(
                       color: isSelected ? Colors.blue[800] : Colors.grey[700],
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
                   );
                 }).toList(),
@@ -299,8 +300,11 @@ class _ReportScreenState extends State<ReportScreen> {
                       });
                     },
                     icon: Icon(
-                      _useCurrentLocation ? Icons.gps_fixed : Icons.gps_not_fixed,
-                      color: _useCurrentLocation ? Colors.blue[600] : Colors.grey,
+                      _useCurrentLocation
+                          ? Icons.gps_fixed
+                          : Icons.gps_not_fixed,
+                      color:
+                          _useCurrentLocation ? Colors.blue[600] : Colors.grey,
                     ),
                   ),
                 ],
@@ -470,7 +474,8 @@ class _ReportScreenState extends State<ReportScreen> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           ),
                           SizedBox(width: 12),

@@ -86,7 +86,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                 onPressed: () {
                   // Share functionality
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Sharing functionality coming soon')),
+                    SnackBar(
+                        content: Text('Sharing functionality coming soon')),
                   );
                 },
               ),
@@ -95,7 +96,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   switch (value) {
                     case 'edit':
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Edit functionality coming soon')),
+                        SnackBar(
+                            content: Text('Edit functionality coming soon')),
                       );
                       break;
                     case 'delete':
@@ -120,7 +122,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                       children: [
                         Icon(Icons.delete, size: 20, color: Colors.red),
                         SizedBox(width: 8),
-                        Text('Delete Report', style: TextStyle(color: Colors.red)),
+                        Text('Delete Report',
+                            style: TextStyle(color: Colors.red)),
                       ],
                     ),
                   ),
@@ -170,7 +173,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                             right: 0,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: _report!.photos.asMap().entries.map((entry) {
+                              children:
+                                  _report!.photos.asMap().entries.map((entry) {
                                 return Container(
                                   margin: EdgeInsets.symmetric(horizontal: 4),
                                   width: 8,
@@ -221,7 +225,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     ),
             ),
           ),
-          
+
           // Content
           SliverToBoxAdapter(
             child: Padding(
@@ -244,16 +248,21 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                       ),
                       SizedBox(width: 12),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: _getStatusColor(_report!.status).withOpacity(0.1),
+                          color:
+                              _getStatusColor(_report!.status).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: _getStatusColor(_report!.status).withOpacity(0.3),
+                            color: _getStatusColor(_report!.status)
+                                .withOpacity(0.3),
                           ),
                         ),
                         child: Text(
-                          _report!.statusString.replaceAll('-', ' ').toUpperCase(),
+                          _report!.statusString
+                              .replaceAll('-', ' ')
+                              .toUpperCase(),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -264,7 +273,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     ],
                   ),
                   SizedBox(height: 16),
-                  
+
                   // Meta Information
                   Container(
                     padding: EdgeInsets.all(16),
@@ -281,17 +290,22 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     ),
                     child: Column(
                       children: [
-                        _buildInfoRow(Icons.category, 'Category', _report!.category),
-                        _buildInfoRow(Icons.location_on, 'Location', _report!.location),
-                        _buildInfoRow(Icons.access_time, 'Reported', _getTimeAgo(_report!.createdAt)),
+                        _buildInfoRow(
+                            Icons.category, 'Category', _report!.category),
+                        _buildInfoRow(
+                            Icons.location_on, 'Location', _report!.location),
+                        _buildInfoRow(Icons.access_time, 'Reported',
+                            _getTimeAgo(_report!.createdAt)),
                         if (_report!.updatedAt != null)
-                          _buildInfoRow(Icons.update, 'Last Updated', _getTimeAgo(_report!.updatedAt!)),
-                        _buildInfoRow(Icons.confirmation_number, 'Report ID', 'CR-${_report!.id}'),
+                          _buildInfoRow(Icons.update, 'Last Updated',
+                              _getTimeAgo(_report!.updatedAt!)),
+                        _buildInfoRow(Icons.confirmation_number, 'Report ID',
+                            'CR-${_report!.id}'),
                       ],
                     ),
                   ),
                   SizedBox(height: 24),
-                  
+
                   // Description
                   Text(
                     'Description',
@@ -325,7 +339,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     ),
                   ),
                   SizedBox(height: 24),
-                  
+
                   // Admin Comments
                   if (_report!.adminComment != null) ...[
                     Text(
@@ -349,7 +363,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.admin_panel_settings, 
+                              Icon(Icons.admin_panel_settings,
                                   color: Colors.blue[600], size: 20),
                               SizedBox(width: 8),
                               Text(
@@ -376,10 +390,10 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     ),
                     SizedBox(height: 24),
                   ],
-                  
+
                   // Progress Timeline
                   Text(
-                    'Progress Timeline',
+                    'Progress',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -388,7 +402,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   SizedBox(height: 16),
                   _buildTimeline(),
                   SizedBox(height: 32),
-                  
+
                   // Action Buttons
                   Row(
                     children: [
@@ -397,7 +411,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                           onPressed: () {
                             // Contact support
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Contact support feature coming soon')),
+                              SnackBar(
+                                  content: Text(
+                                      'Contact support feature coming soon')),
                             );
                           },
                           icon: Icon(Icons.support_agent),
@@ -416,7 +432,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                           onPressed: () {
                             // Update report
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Update report feature coming soon')),
+                              SnackBar(
+                                  content: Text(
+                                      'Update report feature coming soon')),
                             );
                           },
                           icon: Icon(Icons.edit),
@@ -482,18 +500,23 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
       },
       {
         'title': 'Under Review',
-        'time': _report!.status != ReportStatus.submitted ? 'Completed' : 'Pending',
+        'time':
+            _report!.status != ReportStatus.submitted ? 'Completed' : 'Pending',
         'completed': _report!.status != ReportStatus.submitted,
       },
       {
         'title': 'In Progress',
-        'time': _report!.status == ReportStatus.inProgress || _report!.status == ReportStatus.resolved 
-                ? 'Active' : 'Pending',
-        'completed': _report!.status == ReportStatus.inProgress || _report!.status == ReportStatus.resolved,
+        'time': _report!.status == ReportStatus.inProgress ||
+                _report!.status == ReportStatus.resolved
+            ? 'Active'
+            : 'Pending',
+        'completed': _report!.status == ReportStatus.inProgress ||
+            _report!.status == ReportStatus.resolved,
       },
       {
         'title': 'Resolved',
-        'time': _report!.status == ReportStatus.resolved ? 'Completed' : 'Pending',
+        'time':
+            _report!.status == ReportStatus.resolved ? 'Completed' : 'Pending',
         'completed': _report!.status == ReportStatus.resolved,
       },
     ];
@@ -516,7 +539,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           final index = entry.key;
           final event = entry.value;
           final isLast = index == events.length - 1;
-          
+
           return Row(
             children: [
               Column(
@@ -525,8 +548,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: event['completed'] as bool 
-                          ? Colors.green[600] 
+                      color: event['completed'] as bool
+                          ? Colors.green[600]
                           : Colors.grey[300],
                       shape: BoxShape.circle,
                     ),
@@ -554,8 +577,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: event['completed'] as bool 
-                              ? Colors.grey[800] 
+                          color: event['completed'] as bool
+                              ? Colors.grey[800]
                               : Colors.grey[500],
                         ),
                       ),
@@ -582,7 +605,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Delete Report'),
-        content: Text('Are you sure you want to delete this report? This action cannot be undone.'),
+        content: Text(
+            'Are you sure you want to delete this report? This action cannot be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

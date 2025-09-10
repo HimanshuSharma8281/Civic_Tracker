@@ -104,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Column(
                     children: [
                       Text(
-                        'CivicReport',
+                        'Civic Tracker',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,

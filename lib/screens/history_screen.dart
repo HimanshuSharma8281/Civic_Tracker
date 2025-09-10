@@ -5,7 +5,8 @@ import '../data/mock_data.dart';
 class HistoryScreen extends StatefulWidget {
   final Function(String) onReportClick;
 
-  const HistoryScreen({Key? key, required this.onReportClick}) : super(key: key);
+  const HistoryScreen({Key? key, required this.onReportClick})
+      : super(key: key);
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -13,14 +14,27 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  String _searchQuery = '';
   String _selectedFilter = 'All';
+  String _searchQuery = '';
+  List<Report> _filteredReports = [];
+  late TabController _tabController;
+
+  // Define issue categories for statistics
+  final List<String> issueCategories = [
+    'Roads & Infrastructure',
+    'Lighting',
+    'Water & Sewage',
+    'Waste Management',
+    'Public Safety',
+    'Parks & Recreation',
+    'Other'
+  ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _filteredReports = mockReports;
   }
 
   @override
@@ -51,32 +65,11 @@ class _HistoryScreenState extends State<HistoryScreen>
     }
   }
 
-  List<Report> get _filteredReports {
-    List<Report> reports = mockReports;
-    
-    if (_searchQuery.isNotEmpty) {
-      reports = reports.where((report) =>
-        report.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-        report.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-        report.category.toLowerCase().contains(_searchQuery.toLowerCase())
-      ).toList();
-    }
-    
-    if (_selectedFilter != 'All') {
-      reports = reports.where((report) =>
-        report.statusString == _selectedFilter.toLowerCase().replaceAll(' ', '-')
-      ).toList();
-    }
-    
-    return reports..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: Text('My Reports'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -86,7 +79,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             children: [
               // Search Bar
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Search your reports...',
@@ -116,7 +109,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                 ),
               ),
               SizedBox(height: 16),
-              
+
               // Tabs
               TabBar(
                 controller: _tabController,
@@ -159,7 +152,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             ],
           ),
         ),
-        
+
         // Reports List
         Expanded(
           child: _filteredReports.isEmpty
@@ -179,138 +172,149 @@ class _HistoryScreenState extends State<HistoryScreen>
 
   Widget _buildStatisticsTab() {
     final totalReports = mockReports.length;
-    final submittedReports = mockReports.where((r) => r.status == ReportStatus.submitted).length;
-    final inProgressReports = mockReports.where((r) => r.status == ReportStatus.inProgress).length;
-    final resolvedReports = mockReports.where((r) => r.status == ReportStatus.resolved).length;
+    final submittedReports =
+        mockReports.where((r) => r.status == ReportStatus.submitted).length;
+    final inProgressReports =
+        mockReports.where((r) => r.status == ReportStatus.inProgress).length;
+    final resolvedReports =
+        mockReports.where((r) => r.status == ReportStatus.resolved).length;
 
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Report Statistics',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(8), // Reduced from 12
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Report Statistics',
+              style: TextStyle(
+                fontSize: 18, // Reduced from 20
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          SizedBox(height: 24),
-          
-          // Overview Cards
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatCard(
-                  'Total Reports',
-                  totalReports.toString(),
-                  Icons.description,
-                  Colors.blue[600]!,
+            SizedBox(height: 12), // Reduced from 16
+
+            // Overview Cards
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatCard(
+                    'Total Reports',
+                    totalReports.toString(),
+                    Icons.description,
+                    Colors.blue[600]!,
+                  ),
                 ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: _buildStatCard(
-                  'Resolved',
-                  resolvedReports.toString(),
-                  Icons.check_circle,
-                  Colors.green[600]!,
+                SizedBox(width: 10), // Reduced from 12
+                Expanded(
+                  child: _buildStatCard(
+                    'Resolved',
+                    resolvedReports.toString(),
+                    Icons.check_circle,
+                    Colors.green[600]!,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatCard(
-                  'In Progress',
-                  inProgressReports.toString(),
-                  Icons.schedule,
-                  Colors.blue[600]!,
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: _buildStatCard(
-                  'Pending',
-                  submittedReports.toString(),
-                  Icons.pending,
-                  Colors.yellow[600]!,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 32),
-          
-          // Category Breakdown
-          Text(
-            'Reports by Category',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+              ],
             ),
-          ),
-          SizedBox(height: 16),
-          
-          ...issueCategories.take(5).map((category) {
-            final count = mockReports.where((r) => r.category == category).length;
-            if (count == 0) return SizedBox.shrink();
-            
-            return Container(
-              margin: EdgeInsets.only(bottom: 8),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
+            SizedBox(height: 10), // Reduced from 12
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatCard(
+                    'In Progress',
+                    inProgressReports.toString(),
+                    Icons.schedule,
+                    Colors.blue[600]!,
                   ),
-                ],
+                ),
+                SizedBox(width: 10), // Reduced from 12
+                Expanded(
+                  child: _buildStatCard(
+                    'Pending',
+                    submittedReports.toString(),
+                    Icons.pending,
+                    Colors.yellow[600]!,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20), // Reduced from 32
+
+            // Category Breakdown
+            Text(
+              'Reports by Category',
+              style: TextStyle(
+                fontSize: 16, // Reduced from 18
+                fontWeight: FontWeight.w600,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    category,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+            ),
+            SizedBox(height: 12), // Reduced from 16
+
+            ...issueCategories.take(5).map((category) {
+              final count =
+                  mockReports.where((r) => r.category == category).length;
+              if (count == 0) return SizedBox.shrink();
+
+              return Container(
+                margin: EdgeInsets.only(bottom: 6), // Reduced from 8
+                padding: EdgeInsets.all(12), // Reduced from 16
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8), // Reduced from 12
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[100],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      count.toString(),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      category,
                       style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.blue[700],
+                        fontSize: 13, // Reduced from 14
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-        ],
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 3), // Reduced padding
+                      decoration: BoxDecoration(
+                        color: Colors.blue[100],
+                        borderRadius:
+                            BorderRadius.circular(10), // Reduced from 12
+                      ),
+                      child: Text(
+                        count.toString(),
+                        style: TextStyle(
+                          fontSize: 11, // Reduced from 12
+                          fontWeight: FontWeight.w600,
+                          color: Colors.blue[700],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+            SizedBox(height: 20), // Add bottom padding
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+      String title, String value, IconData icon, Color color) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.all(10), // Reduced from 12
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10), // Reduced from 12
+        border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -320,22 +324,29 @@ class _HistoryScreenState extends State<HistoryScreen>
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: 24),
-          SizedBox(height: 8),
+          Icon(
+            icon,
+            color: color,
+            size: 22, // Reduced from 24
+          ),
+          SizedBox(height: 4), // Reduced from 6
           Text(
             value,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 18, // Reduced from 20
               fontWeight: FontWeight.bold,
-              color: color,
+              color: Colors.black87,
             ),
           ),
+          SizedBox(height: 2), // Keep same
           Text(
             title,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 10, // Reduced from 11
               color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
@@ -414,7 +425,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                   ],
                 ),
                 SizedBox(height: 8),
-                
+
                 // Description
                 Text(
                   report.description,
@@ -426,7 +437,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 12),
-                
+
                 // Footer
                 Row(
                   children: [
@@ -451,7 +462,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                     ),
                   ],
                 ),
-                
+
                 // Photos indicator
                 if (report.photos.isNotEmpty)
                   Padding(

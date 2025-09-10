@@ -44,6 +44,29 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _handleSocialLogin(String provider) {
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Simulate social login delay
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        _isLoading = false;
+      });
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$provider login successful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      widget.onLogin();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 48),
-                
+
                 // Email field
                 TextFormField(
                   controller: _emailController,
@@ -115,14 +138,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
                       return 'Please enter a valid email';
                     }
                     return null;
                   },
                 ),
                 SizedBox(height: 16),
-                
+
                 // Password field
                 TextFormField(
                   controller: _passwordController,
@@ -133,7 +157,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     prefixIcon: Icon(Icons.lock_outlined),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                        _obscurePassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
                       ),
                       onPressed: () {
                         setState(() {
@@ -158,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 SizedBox(height: 24),
-                
+
                 // Login button
                 ElevatedButton(
                   onPressed: _isLoading ? null : _handleLogin,
@@ -177,7 +203,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
                       : Text(
@@ -189,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                 ),
                 SizedBox(height: 16),
-                
+
                 // Forgot password
                 Center(
                   child: TextButton(
@@ -206,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 32),
-                
+
                 // Divider
                 Row(
                   children: [
@@ -214,18 +241,103 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
-                        'OR',
+                        'or continue with',
                         style: TextStyle(
                           color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
                         ),
                       ),
                     ),
                     Expanded(child: Divider()),
                   ],
                 ),
+                SizedBox(height: 24),
+
+                // Circular Social Login Icons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Facebook Icon
+                    _buildSocialIcon(
+                      onTap: () => _handleSocialLogin('Facebook'),
+                      backgroundColor: Color(0xFF1877F2),
+                      child: Image.asset(
+                        'assets/icons/facebook_icon.png',
+                        width: 24,
+                        height: 24,
+                        color: Colors.white,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Text(
+                            'f',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    // Apple Icon (Dark)
+                    _buildSocialIcon(
+                      onTap: () => _handleSocialLogin('Apple'),
+                      backgroundColor: Colors.black,
+                      child: Icon(
+                        Icons.apple,
+                        size: 24,
+                        color: Colors.white,
+                      ),
+                    ),
+
+                    // Google Icon
+                    _buildSocialIcon(
+                      onTap: () => _handleSocialLogin('Google'),
+                      backgroundColor: Colors.white,
+                      borderColor: Colors.grey.shade300,
+                      child: Image.asset(
+                        'assets/icons/google_icon.png',
+                        width: 24,
+                        height: 24,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Recreate Google G with multiple colors
+                          return Container(
+                            width: 24,
+                            height: 24,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // Outer G shape
+                                Text(
+                                  'G',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    foreground: Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 2
+                                      ..color = Color(0xFF4285F4),
+                                  ),
+                                ),
+                                // Inner G
+                                Text(
+                                  'G',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF4285F4),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(height: 32),
-                
+
                 // Sign up link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -250,6 +362,34 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSocialIcon({
+    required VoidCallback onTap,
+    required Color backgroundColor,
+    Color? borderColor,
+    required Widget child,
+  }) {
+    return GestureDetector(
+      onTap: _isLoading ? null : onTap,
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: backgroundColor,
+          border: borderColor != null ? Border.all(color: borderColor) : null,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Center(child: child),
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'screens/history_screen.dart';
 import 'screens/report_detail_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/notifications_screen.dart';
+import 'screens/asset_test_screen.dart';
 import 'widgets/bottom_navigation.dart';
 import 'data/mock_data.dart';
 import 'models/models.dart';
@@ -24,7 +25,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'CivicReport',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFF2196F3),
+          brightness: Brightness.light,
+          primary: Color(0xFF2196F3),
+          onPrimary: Colors.white,
+          secondary: Color(0xFF1976D2),
+          onSecondary: Colors.white,
+          surface: Colors.white,
+          onSurface: Colors.black,
+          background: Color(0xFFF8F9FA),
+          onBackground: Colors.black,
+        ),
         fontFamily: 'Inter',
         visualDensity: VisualDensity.adaptivePlatformDensity,
         appBarTheme: AppBarTheme(
@@ -32,6 +45,96 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Inter',
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF2196F3),
+            foregroundColor: Colors.white,
+            elevation: 2,
+            shadowColor: Color(0xFF2196F3).withOpacity(0.3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Color(0xFF2196F3),
+            side: BorderSide(color: Color(0xFF2196F3), width: 1.5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: Color(0xFF2196F3),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Color(0xFFF5F5F5),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Color(0xFFE0E0E0)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Color(0xFF2196F3), width: 2),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.red, width: 1.5),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
+        cardTheme: CardTheme(
+          color: Colors.white,
+          elevation: 2,
+          shadowColor: Colors.black.withOpacity(0.1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        chipTheme: ChipThemeData(
+          backgroundColor: Colors.white,
+          selectedColor: Color(0xFF2196F3),
+          secondarySelectedColor: Color(0xFF2196F3),
+          labelStyle: TextStyle(color: Color(0xFF2196F3)),
+          secondaryLabelStyle: TextStyle(color: Colors.white),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: Color(0xFF2196F3)),
+          ),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFF2196F3),
+          foregroundColor: Colors.white,
+          elevation: 4,
+          shape: CircleBorder(),
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          selectedItemColor: Color(0xFF2196F3),
+          unselectedItemColor: Color(0xFF9E9E9E),
+          elevation: 8,
+          type: BottomNavigationBarType.fixed,
         ),
       ),
       home: MainApp(),
@@ -110,7 +213,8 @@ class _MainAppState extends State<MainApp> {
   Widget _renderScreen() {
     switch (_currentScreen) {
       case AppScreen.splash:
-        return SplashScreen(onContinue: () => _handleNavigation(AppScreen.login));
+        return SplashScreen(
+            onContinue: () => _handleNavigation(AppScreen.login));
       case AppScreen.login:
         return LoginScreen(
           onLogin: _handleAuth,
@@ -143,15 +247,14 @@ class _MainAppState extends State<MainApp> {
       case AppScreen.profile:
         return ProfileScreen(onLogout: _handleLogout);
       case AppScreen.notifications:
-        return NotificationsScreen(onNotificationClick: _handleNotificationClick);
-      default:
-        return HomeScreen(onNavigate: _handleNavigation);
+        return NotificationsScreen(
+            onNotificationClick: _handleNotificationClick);
     }
   }
 
-  bool get _showBottomNav => 
-    _isAuthenticated && 
-    ![AppScreen.report, AppScreen.confirmation, AppScreen.detail].contains(_currentScreen);
+  bool get _showBottomNav =>
+      _isAuthenticated &&
+      ![AppScreen.confirmation, AppScreen.detail].contains(_currentScreen);
 
   @override
   Widget build(BuildContext context) {
