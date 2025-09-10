@@ -104,7 +104,7 @@ class MyApp extends StatelessWidget {
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: Colors.white,
           elevation: 2,
           shadowColor: Colors.black.withOpacity(0.1),
